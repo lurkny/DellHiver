@@ -2,10 +2,10 @@ use std::fs;
 use std::collections::HashMap;
 use serde::Deserialize;
 use toml;
-use rdev::{simulate, EventType, Key};
+use rdev::{simulate, EventType, Key,listen};
 
 
-#[derive(Deserialize, Debug)]
+#[derive(Debug, Deserialize)]
 struct Strategem {
     name: String,
     combo: Vec<String>,
@@ -16,16 +16,15 @@ type Strategems = HashMap<String, Strategem>;
 fn main() {
     let strategems: Strategems = parse_strats_from_file();
 
-    loop {
-        let mut input = String::new();
-        println!("Enter the name of the strategem you want to execute: ");
-        std::io::stdin().read_line(&mut input).unwrap();
-        let input = input.trim();
-        match strategems.get(input) {
-            Some(strat) => execute_strat(strat),
-            None => println!("No strategem found with that name"),
+    listen(move |event| {
+        if let EventType::KeyPress(key) = event.event_type {
+            if key == Key::KeyP {
+                if let Some(strategem) = strategems.get("reinforce") {
+                    execute_strat(strategem);
+                }
+            }
         }
-    }
+    }).unwrap();
 }
 
 fn execute_strat(strat: &Strategem) {
