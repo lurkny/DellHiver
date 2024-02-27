@@ -1,0 +1,5 @@
+[keypress_delay]
+time = 20
+
+[keybinds]
+reinforce = "P"
