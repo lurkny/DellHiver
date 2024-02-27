@@ -14,18 +14,8 @@ struct Strategem {
 type Strategems = HashMap<String, Strategem>;
 
 fn main() {
-    let contents = fs::read_to_string("./src/strats.toml")
-        .expect("Something went wrong reading the file");
+    let strategems: Strategems = parse_strats_from_file();
 
-    let strategems: Strategems = match toml::from_str(&contents) {
-        Ok(strategems) => strategems,
-        Err(e) => {
-            eprintln!("Failed to parse TOML: {}", e);
-            return;
-        }
-    };
-
-    
     loop {
         let mut input = String::new();
         println!("Enter the name of the strategem you want to execute: ");
@@ -39,15 +29,14 @@ fn main() {
 }
 
 fn execute_strat(strat: &Strategem) {
+    println!("Executing strategem: {}", strat.name);
     for key in strat.combo.clone() {
-        //match left to A and right to D and W to up and S to down
         match key.as_str() {
             "left" => send(&EventType::KeyPress(Key::KeyA)),
             "right" => send(&EventType::KeyPress(Key::KeyD)),
             "up" => send(&EventType::KeyPress(Key::KeyW)),
             "down" => send(&EventType::KeyPress(Key::KeyS)),
             _ => (),
-           
         }
     }
 }
@@ -57,6 +46,19 @@ fn send(event: &EventType) {
         Ok(_) => (),
         Err(e) => eprintln!("Failed to simulate event: {}", e),
      }
+}
+
+fn parse_strats_from_file() -> Strategems {
+    let contents = fs::read_to_string("./src/strats.toml")
+        .expect("Something went wrong reading the file");
+
+    match toml::from_str(&contents) {
+        Ok(strategems) => strategems,
+        Err(e) => {
+            eprintln!("Failed to parse TOML: {}", e);
+            std::process::exit(1);
+        }
+    }
 }
 
 
