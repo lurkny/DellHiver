@@ -1,8 +1,9 @@
-use std::fs;
+use std::{fs, thread::sleep};
 use std::collections::HashMap;
 use serde::Deserialize;
 use toml;
 use rdev::{simulate, EventType, Key,listen};
+use std::time::Duration;
 
 
 #[derive(Debug, Deserialize)]
@@ -33,6 +34,7 @@ fn main() {
 fn execute_strat(strat: &Strategem) {
     println!("Executing strategem: {}", strat.name);
     for key in strat.combo.clone() {
+        sleep(Duration::from_millis(20));
         match key.as_str() {
             "left" => send(&EventType::KeyPress(Key::KeyA)),
             "right" => send(&EventType::KeyPress(Key::KeyD)),
