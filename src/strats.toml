@@ -1,3 +1,9 @@
 [reinforce]
 name = "Reinforce"
 combo = ["left", "up", "right", "down"]
+keybind = 'p'
+
+[ohio]
+name = "Ohio"
+combo = ["left", "up", "right", "down", "down", "down"]
+keybind = 'o'

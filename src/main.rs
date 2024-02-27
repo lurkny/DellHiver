@@ -5,34 +5,50 @@ use toml;
 use rdev::{simulate, EventType, Key,listen};
 use std::time::Duration;
 
+mod key_to_string;
+
+use key_to_string::key_to_string;
+
 
 #[derive(Debug, Deserialize)]
 struct Strategem {
     name: String,
     combo: Vec<String>,
+    keybind: String
 }
 
 type Strategems = HashMap<String, Strategem>;
 
 fn main() {
-    let strategems: Strategems = parse_strats_from_file();
+    let mut strategems: HashMap<String, Strategem> = parse_strats_from_file();
+
+    let strategems: HashMap<String, Strategem> = strategems
+        .drain()
+        .map(|(_, strat)| (strat.keybind.clone(), strat))
+        .collect();
+
+
+    show_welcome(&strategems);
 
     listen(move |event| {
         if let EventType::KeyPress(key) = event.event_type {
-            /* 
-            This code will be garbage until I can add a way for users to specifiy the keybind in config
-             */
-            if key == Key::KeyP {
-                if let Some(strategem) = strategems.get("reinforce") {
-                    execute_strat(strategem);
-                }
-            } 
+            let key_str = key_to_string(key);
+            if let Some(strat) = strategems.get(&key_str) {
+                execute_strat(strat);
+            }
         }
     }).unwrap();
 }
 
+fn show_welcome(strats: &Strategems) {
+    println!("Welcome to the Strategem Manager!");
+    for (key, strat) in strats {
+        println!("Press {} to execute {}", key, strat.name);
+    }
+}
+
 fn execute_strat(strat: &Strategem) {
-    println!("Executing strategem: {}", strat.name);
+   // println!("Executing strategem: {}", strat.name);
     for key in strat.combo.clone() {
         sleep(Duration::from_millis(20));
         match key.as_str() {
