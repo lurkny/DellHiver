@@ -1,20 +1,18 @@
-use std::{fs, thread::sleep};
-use std::collections::HashMap;
+use rdev::{listen, simulate, EventType, Key};
 use serde::Deserialize;
-use toml;
-use rdev::{simulate, EventType, Key,listen};
+use std::collections::HashMap;
 use std::time::Duration;
+use std::{fs, thread::sleep};
+use toml;
 
 mod key_to_string;
-
 use key_to_string::key_to_string;
-
 
 #[derive(Debug, Deserialize)]
 struct Strategem {
     name: String,
     combo: Vec<String>,
-    keybind: String
+    keybind: String,
 }
 
 type Strategems = HashMap<String, Strategem>;
@@ -27,7 +25,6 @@ fn main() {
         .map(|(_, strat)| (strat.keybind.clone(), strat))
         .collect();
 
-
     show_welcome(&strategems);
 
     listen(move |event| {
@@ -37,7 +34,8 @@ fn main() {
                 execute_strat(strat);
             }
         }
-    }).unwrap();
+    })
+    .unwrap();
 }
 
 fn show_welcome(strats: &Strategems) {
@@ -48,7 +46,7 @@ fn show_welcome(strats: &Strategems) {
 }
 
 fn execute_strat(strat: &Strategem) {
-   // println!("Executing strategem: {}", strat.name);
+    // println!("Executing strategem: {}", strat.name);
     for key in strat.combo.clone() {
         sleep(Duration::from_millis(20));
         match key.as_str() {
@@ -62,15 +60,15 @@ fn execute_strat(strat: &Strategem) {
 }
 
 fn send(event: &EventType) {
-     match simulate(event) {
+    match simulate(event) {
         Ok(_) => (),
         Err(e) => eprintln!("Failed to simulate event: {}", e),
-     }
+    }
 }
 
 fn parse_strats_from_file() -> Strategems {
-    let contents = fs::read_to_string("./src/strats.toml")
-        .expect("Something went wrong reading the file");
+    let contents =
+        fs::read_to_string("./src/strats.toml").expect("Something went wrong reading the file");
 
     match toml::from_str(&contents) {
         Ok(strategems) => strategems,
@@ -80,5 +78,3 @@ fn parse_strats_from_file() -> Strategems {
         }
     }
 }
-
-

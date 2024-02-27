@@ -37,7 +37,7 @@ pub fn key_to_string(key: Key) -> String {
         Key::Num6 => "6".to_string(),
         Key::Num7 => "7".to_string(),
         Key::Num8 => "8".to_string(),
-        Key::Num9 => "9".to_string(), 
+        Key::Num9 => "9".to_string(),
         Key::Space => " ".to_string(),
         Key::Tab => "\t".to_string(),
         Key::Backspace => "\x08".to_string(),
