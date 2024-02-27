@@ -15,6 +15,6 @@ name = "Reinforce"
 combo = ["left", "up", "right", "down"]
 keybind = 'p'
 ```
-Currently, the program assumes that you are using WASD to call in stratagems, with support for custom stratagem binds coming later. 
+Currently, the program assumes that you are using WASD to call in strategems, with support for custom stratagem binds coming later. 
 
 
