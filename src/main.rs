@@ -18,11 +18,14 @@ fn main() {
 
     listen(move |event| {
         if let EventType::KeyPress(key) = event.event_type {
+            /* 
+            This code will be garbage until I can add a way for users to specifiy the keybind in config
+             */
             if key == Key::KeyP {
                 if let Some(strategem) = strategems.get("reinforce") {
                     execute_strat(strategem);
                 }
-            }
+            } 
         }
     }).unwrap();
 }
