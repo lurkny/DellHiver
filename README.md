@@ -8,7 +8,7 @@ Simply download the executable or run cargo build --release if you wish to build
 
 ## Configuration
 
-Config is done in strats.toml. For example, here would be an example entry to the strats file. 
+Config is done in strats.toml. For example, here is an entry to the strats file. 
 ```
 [reinforce]
 name = "Reinforce"
