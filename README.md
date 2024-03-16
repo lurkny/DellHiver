@@ -1,6 +1,6 @@
 # Welcome to DellHiver
 
-DellHiver is a highly customizable macro program that was designed to work with the game HellDivers 2. Users can quickly add strategems with custom keybinds in the strats.toml file.
+DellHiver is a highly customizable macro program that was designed to work with the game HellDivers 2. Users can quickly add stratagems with custom keybinds in the strats.toml file.
 
 
 # Usage
